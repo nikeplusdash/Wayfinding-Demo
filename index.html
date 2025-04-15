@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Gesture & Face Controlled Demo</title>
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+    <!-- Mirrored camera feed with low opacity -->
+    <video id="webcam" autoplay playsinline style="opacity: 0.3;"></video>
+
+    <!-- Debug overlay container (for face bounding boxes) -->
+    <div id="liveView"></div>
+
+    <!-- Dedicated timeout overlay (always visible on top) -->
+    <div id="timeoutOverlay"></div>
+
+    <!-- Default screen (shown until face is held for timeout) -->
+    <div id="defaultScreen" class="screen active">
+        <h1>Welcome!</h1>
+        <p>Please step in front of the camera to begin.</p>
+    </div>
+
+    <!-- Questionnaire screen with two buttons -->
+    <div id="questionnaireScreen" class="screen">
+        <h1>Questionnaire</h1>
+        <p>This is a dummy interface for testing gesture control.</p>
+        <!-- Progress Button (requires holding for 5 seconds) -->
+        <button id="progressButton" data-gesture-type="progress" onclick="alert('Progress Button clicked!')">
+            Progress Button
+            <div class="progressBar"></div>
+        </button>
+        <br /><br />
+        <!-- Instant Button (clicks immediately on gesture) -->
+        <button id="instantButton" data-gesture-type="instant" onclick="alert('Instant Button clicked!')">
+            Instant Click Button
+        </button>
+    </div>
+
+    <!-- Final screen (for later use) -->
+    <div id="finalScreen" class="screen">
+        <h1>Thank You!</h1>
+        <p>Your responses have been recorded.</p>
+    </div>
+
+    <!-- Custom cursor that follows your wrist -->
+    <div id="custom_cursor"></div>
+
+    <!-- External JS -->
+    <script type="module" src="./script.js"></script>
+</body>
+
+</html>

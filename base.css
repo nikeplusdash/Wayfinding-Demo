@@ -279,12 +279,40 @@ body {
     position: absolute;
     width: 30px;
     height: 30px;
-    border-radius: 50%;
-    background: var(--neon-red);
+    border-radius: 0%;
+    border: var(--white) 2px solid;
     z-index: 10;
     pointer-events: none;
     transform: scale(0);
-    transition: transform 0.3s ease-out;
+    transition: transform 0.4s ease-in-out;
+    transition: width 0.1s ease-in-out, height 0.1s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#custom_cursor.hovered_cursor {
+    width: 80px;
+    height: 40px;
+}
+
+#custom_cursor.clicked_cursor {
+    width: 36px;
+    height: 36px;
+    border-color: var(--neon-yellow);
+    --white: var(--neon-yellow);
+}
+
+.animated_cursor {
+    animation: rotate-animation 1s ease-in-out infinite;
+}
+
+#custom_cursor.clicked_cursor {
+    transform: scale(3);
+}
+
+#custom_cursor>* {
+    margin: auto;
 }
 
 .wrapper {
@@ -295,7 +323,8 @@ body {
     height: 18px;
 }
 
-.wrapper div.glitch, .wrapper div.glitch2 {
+.wrapper div.glitch,
+.wrapper div.glitch2 {
     color: white;
     font-weight: 800;
     position: relative;
@@ -333,7 +362,8 @@ body {
     top: 0;
 }
 
-.wrapper div.glitch::before,.wrapper div.glitch2::before {
+.wrapper div.glitch::before,
+.wrapper div.glitch2::before {
     left: 3px;
     text-shadow: -2px 0 red;
     animation-name: glitch-animation-1;
@@ -344,7 +374,8 @@ body {
     animation-direction: reverse-alternate;
 }
 
-.wrapper div.glitch::after,.wrapper div.glitch2::after {
+.wrapper div.glitch::after,
+.wrapper div.glitch2::after {
     left: -3px;
     text-shadow: -2px 0 blue;
     animation-name: glitch-animation-2;

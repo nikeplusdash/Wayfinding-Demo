@@ -14,6 +14,7 @@ const questionnaireScreenC = document.getElementById("questionnaireScreenC");
 const finalScreen = document.getElementById("finalScreen");
 const outputScreen = document.getElementById("outputScreen");
 const customCursor = document.getElementById("custom_cursor");
+const loaderCursor = document.getElementById("loading_cursor");
 const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressText');
 const userSelections = {
@@ -57,7 +58,7 @@ let runningMode = "VIDEO";
 
 // Timeout values (in milliseconds)
 const PRE_QUESTIONNAIRE_TIMEOUT = 1000; // 1 second before questionnaire appears (adjusted as needed)
-const STEP_BACK_TIMEOUT = 7000;        // 7 seconds allowed to step back in questionnaire
+const STEP_BACK_TIMEOUT = 12000;        // 12 seconds allowed to step back in questionnaire
 const HOLD_TIMEOUT = 1300;
 
 // Timers for tracking face presence in each state.
@@ -162,9 +163,9 @@ async function setupCamera() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
             video: {
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
-            facingMode: "user" // front-facing webcam
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+                facingMode: "user" // front-facing webcam
             }
         });
         video.srcObject = stream;
@@ -178,8 +179,6 @@ async function setupCamera() {
         console.error("Error accessing the webcam:", err);
     }
 }
-
-// --- Gesture Handling Functions ---
 
 // Handles a closed_fist gesture based on the interactive element's type.
 function handleClosedFist(hoveredElement, pointerX, pointerY, nowMs) {
@@ -228,7 +227,23 @@ function resetGestureState(hoveredElement) {
         }
     }
     isClicking = false;
-    customCursor.style.background = "red";
+    resetCursor();
+}
+
+function hoveredCursor() {
+    customCursor.classList.add("hovered_cursor");
+
+}
+
+function clickedCursor() {
+    customCursor.classList.add("clicked_cursor");
+    loaderCursor.classList.add("animated_cursor");
+}
+
+function resetCursor() {
+    customCursor.classList.remove("hovered_cursor");
+    customCursor.classList.remove("clicked_cursor");
+    loaderCursor.classList.remove("animated_cursor");
 }
 
 // --- Main Processing Loop ---
@@ -267,7 +282,8 @@ async function predictWebcam() {
             const remaining = Math.max(0, (STEP_BACK_TIMEOUT - elapsed) / 1000);
             countdownMessage = `Please step back in within: ${remaining.toFixed(1)} s`;
             if (elapsed >= STEP_BACK_TIMEOUT) {
-                transitionTo("defaultScreen");
+                // transitionTo("defaultScreen");
+                transitionToNextWindow(5);
             }
         }
 
@@ -300,9 +316,7 @@ async function predictWebcam() {
         // --- Check for Interactive Element Under Pointer ---
         const hoveredElement = document.elementFromPoint(pointerX, pointerY);
         if (hoveredElement && hoveredElement.hasAttribute('data-gesture-type')) {
-            // Change cursor shape to square (via border-radius)
-            customCursor.style.borderRadius = "50%";
-
+            
             // If a new interactive element is hovered, update the hover class.
             if (currentHoveredElement !== hoveredElement) {
                 // Remove the 'hovered' class from the previous element, if any.
@@ -310,17 +324,18 @@ async function predictWebcam() {
                     currentHoveredElement.classList.remove("hovered");
                 }
                 // Add the 'hovered' class to the new element.
+                hoveredCursor();
                 hoveredElement.classList.add("hovered");
                 // Update the stored element.
                 currentHoveredElement = hoveredElement;
             }
         } else {
-            customCursor.style.borderRadius = "0%";
-
+            
             // Remove the hover effect from the previously hovered element.
             if (currentHoveredElement) {
                 currentHoveredElement.classList.remove("hovered");
                 currentHoveredElement = null;
+                resetCursor();
             }
         }
 
@@ -329,6 +344,7 @@ async function predictWebcam() {
             const topGesture = gestureResult.gestures[0][0];
             const gestureName = topGesture.categoryName.toLowerCase();
             if (gestureName === "closed_fist") {
+                clickedCursor();
                 handleClosedFist(hoveredElement, pointerX, pointerY, nowMs);
             } else {
                 resetGestureState(hoveredElement);
@@ -482,7 +498,7 @@ function getPersonaText(era, destination, genre) {
     const trope = genreMap[genre];
 
     // Update text
-    const text = `<span>You are the <span style="color: var(--neon-yellow)">${trope}</span> <span style="color: var(--neon-blue)">${archetype}</span> from the <span style="color: var(--neon-green)">${origin}</span>.</span>`;
+    const text = `<span>You are the <span style="color: var(--neon-red)">${trope}</span> <span style="color: var(--neon-blue)">${archetype}</span> from the <span style="color: var(--neon-green)">${origin}</span>.</span>`;
     document.getElementById("outputText").innerHTML = text;
 
     // Update images

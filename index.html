@@ -4,45 +4,492 @@
 <head>
     <meta charset="UTF-8" />
     <title>Gesture & Face Controlled Demo</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./base.css" />
+    <link rel="stylesheet" href="./animations.css" />
+    <link rel="stylesheet" href="./components.css" />
 </head>
 
 <body>
     <!-- Mirrored camera feed with low opacity -->
-    <video id="webcam" autoplay playsinline style="opacity: 0.3;"></video>
-
-    <!-- Debug overlay container (for face bounding boxes) -->
-    <div id="liveView"></div>
+    <video id="webcam" autoplay playsinline></video>
 
     <!-- Dedicated timeout overlay (always visible on top) -->
     <div id="timeoutOverlay"></div>
 
-    <!-- Default screen (shown until face is held for timeout) -->
-    <div id="defaultScreen" class="screen active">
-        <h1>Welcome!</h1>
-        <p>Please step in front of the camera to begin.</p>
+    <div class="window scary-console">
+        <div class="window-content">
+            <div class="task-bar">
+                <p style="opacity: 0.4;">console.log</p>
+                <div>
+                    <div class="close">X</div>
+                </div>
+            </div>
+            <div id="console">
+            </div>
+        </div>
     </div>
 
-    <!-- Questionnaire screen with two buttons -->
-    <div id="questionnaireScreen" class="screen">
-        <h1>Questionnaire</h1>
-        <p>This is a dummy interface for testing gesture control.</p>
-        <!-- Progress Button (requires holding for 5 seconds) -->
-        <button id="progressButton" data-gesture-type="progress" onclick="alert('Progress Button clicked!')">
-            Progress Button
-            <div class="progressBar"></div>
-        </button>
-        <br /><br />
-        <!-- Instant Button (clicks immediately on gesture) -->
-        <button id="instantButton" data-gesture-type="instant" onclick="alert('Instant Button clicked!')">
-            Instant Click Button
-        </button>
+    <div class="window webcam-console" style="opacity: 0.4;">
+        <div class="window-content">
+            <div class="task-bar">
+                <p>webcam footage</p>
+                <div>
+                    <div class="close">X</div>
+                </div>
+            </div>
+            <div>
+                <canvas id="webcamCanvas" width="192" height="108"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div id="defaultScreen" class="screen active">
+        <div class="screen-content">
+            <div class="moving-signals">
+                <div class="track">
+                    <span class="signal forward">CHRNL</span>
+                    <span class="signal reverse">TEMPO</span>
+                    <span class="signal forward">QFLUX</span>
+                    <span class="signal forward">RIFTX</span>
+                    <span class="signal reverse">ORBIT</span>
+                    <span class="signal reverse">FLUXR</span>
+                    <span class="signal reverse">EPOCH</span>
+                    <span class="signal forward">SHIFT</span>
+                    <span class="signal forward">WARPX</span>
+                    <span class="signal reverse">VORTX</span>
+                    <span class="signal forward">PARAX</span>
+                    <span class="signal forward">TIMEX</span>
+                    <span class="signal forward" aria-hidden="true">CHRNL</span>
+                    <span class="signal reverse" aria-hidden="true">TEMPO</span>
+                    <span class="signal forward" aria-hidden="true">QFLUX</span>
+                    <span class="signal forward" aria-hidden="true">RIFTX</span>
+                    <span class="signal reverse" aria-hidden="true">ORBIT</span>
+                    <span class="signal reverse" aria-hidden="true">FLUXR</span>
+                    <span class="signal reverse" aria-hidden="true">EPOCH</span>
+                    <span class="signal forward" aria-hidden="true">SHIFT</span>
+                    <span class="signal forward" aria-hidden="true">WARPX</span>
+                    <span class="signal reverse" aria-hidden="true">VORTX</span>
+                    <span class="signal forward" aria-hidden="true">PARAX</span>
+                    <span class="signal forward" aria-hidden="true">TIMEX</span>
+                </div>
+            </div>
+
+
+            <div class="wrapper" style="margin: 38px 0 16px 0;">
+                <div class="glitch">Hi there, traveller</div>
+            </div>
+            <p class="">Are you ready for your time travelling journey?</p>
+            <div class="instruction-wrapper" style="margin: 64px 0;">
+                <div class="col">
+                    <img src="./icons/face.svg" alt="">
+                    <p>Interacting</p>
+                    <div>Stand within 1 meter of the screen and keep your face clearly visible</div>
+                </div>
+                <div class="divider"></div>
+                <div class="col">
+                    <img src="./icons/hand.svg" alt="">
+                    <p>Navigating</p>
+                    <div>Wave or move your hand in front of the screen to browse through options</div>
+                </div>
+                <div class="divider"></div>
+                <div class="col">
+                    <img src="./icons/fist.svg" alt="">
+                    <p>Clicking</p>
+                    <div>Close your hand into a fist to <span style="color: var(--neon-blue);">select blue
+                            options</span> and <span style="color: var(--neon-green);">hold it to click the green
+                            buttons</span></div>
+                </div>
+            </div>
+            <div class="button">
+                <div class="button-window submit-window">
+                    <button class="button-content submit" data-gesture-type="progress" id="initiateButton"
+                        onclick="transitionToNextWindow(0)">
+                        Initiate time travel
+                        <div class="progressBar"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="questionnaireScreenA" class="screen">
+        <div class="screen-content text-left">
+            <div class="moving-signals">
+                <div class="track">
+                    <span class="signal forward">CHRNL</span>
+                    <span class="signal reverse">TEMPO</span>
+                    <span class="signal forward">QFLUX</span>
+                    <span class="signal forward">RIFTX</span>
+                    <span class="signal reverse">ORBIT</span>
+                    <span class="signal reverse">FLUXR</span>
+                    <span class="signal reverse">EPOCH</span>
+                    <span class="signal forward">SHIFT</span>
+                    <span class="signal forward">WARPX</span>
+                    <span class="signal reverse">VORTX</span>
+                    <span class="signal forward">PARAX</span>
+                    <span class="signal forward">TIMEX</span>
+                    <span class="signal forward" aria-hidden="true">CHRNL</span>
+                    <span class="signal reverse" aria-hidden="true">TEMPO</span>
+                    <span class="signal forward" aria-hidden="true">QFLUX</span>
+                    <span class="signal forward" aria-hidden="true">RIFTX</span>
+                    <span class="signal reverse" aria-hidden="true">ORBIT</span>
+                    <span class="signal reverse" aria-hidden="true">FLUXR</span>
+                    <span class="signal reverse" aria-hidden="true">EPOCH</span>
+                    <span class="signal forward" aria-hidden="true">SHIFT</span>
+                    <span class="signal forward" aria-hidden="true">WARPX</span>
+                    <span class="signal reverse" aria-hidden="true">VORTX</span>
+                    <span class="signal forward" aria-hidden="true">PARAX</span>
+                    <span class="signal forward" aria-hidden="true">TIMEX</span>
+                </div>
+            </div>
+            <div class="p8">
+                <div class="window question-console" style="margin: 48px 0 0 0;">
+                    <div class="window-content l3 row gap">
+                        <div>
+                            <span class="question">Q</span>
+                        </div>
+                        <div class="column">
+                            <span style="font-size: 1.5rem;line-height: 42px;">Choose Your Era: Where in Time Does Your
+                                Heart Belong?</span>
+                            <span style="font-weight: 100;opacity: 0.5">Select the time period you wish to travel
+                                into</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'era')">
+                            Flourishing of Literature & Scriptures
+                        </button>
+                    </div>
+                </div>
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'era')">
+                            Golden Age of Sculpture
+                        </button>
+                    </div>
+                </div>
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'era')">
+                            Revolution in Paintings
+                        </button>
+                    </div>
+                </div>
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'era')">
+                            Recent History of Wars & Protest
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="button">
+                <div class="button-window submit-window">
+                    <button class="button-content submit" data-gesture-type="progress" id="initiateButton"
+                        onclick="transitionToNextWindow(1)">
+                        Confirm
+                        <div class="progressBar"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="questionnaireScreenB" class="screen">
+        <div class="screen-content text-left">
+            <div class="moving-signals">
+                <div class="track">
+                    <span class="signal forward">CHRNL</span>
+                    <span class="signal reverse">TEMPO</span>
+                    <span class="signal forward">QFLUX</span>
+                    <span class="signal forward">RIFTX</span>
+                    <span class="signal reverse">ORBIT</span>
+                    <span class="signal reverse">FLUXR</span>
+                    <span class="signal reverse">EPOCH</span>
+                    <span class="signal forward">SHIFT</span>
+                    <span class="signal forward">WARPX</span>
+                    <span class="signal reverse">VORTX</span>
+                    <span class="signal forward">PARAX</span>
+                    <span class="signal forward">TIMEX</span>
+                    <span class="signal forward" aria-hidden="true">CHRNL</span>
+                    <span class="signal reverse" aria-hidden="true">TEMPO</span>
+                    <span class="signal forward" aria-hidden="true">QFLUX</span>
+                    <span class="signal forward" aria-hidden="true">RIFTX</span>
+                    <span class="signal reverse" aria-hidden="true">ORBIT</span>
+                    <span class="signal reverse" aria-hidden="true">FLUXR</span>
+                    <span class="signal reverse" aria-hidden="true">EPOCH</span>
+                    <span class="signal forward" aria-hidden="true">SHIFT</span>
+                    <span class="signal forward" aria-hidden="true">WARPX</span>
+                    <span class="signal reverse" aria-hidden="true">VORTX</span>
+                    <span class="signal forward" aria-hidden="true">PARAX</span>
+                    <span class="signal forward" aria-hidden="true">TIMEX</span>
+                </div>
+            </div>
+            <div class="p8">
+                <div class="window question-console" style="margin: 48px 0 0 0;">
+                    <div class="window-content l3 row gap">
+                        <div>
+                            <span class="question">Q</span>
+                        </div>
+                        <div class="column">
+                            <span style="font-size: 1.5rem;line-height: 42px;">Chart Your Course: Choose a
+                                Destination!</span>
+                            <span style="font-weight: 100;opacity: 0.5">Select the region you wish to travel into</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'destination')">
+                            Asia
+                        </button>
+                    </div>
+                </div>
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'destination')">
+                            Africa
+                        </button>
+                    </div>
+                </div>
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'destination')">
+                            Europe
+                        </button>
+                    </div>
+                </div>
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'destination')">
+                            America
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="button">
+                <div class="button-window submit-window">
+                    <button class="button-content submit" data-gesture-type="progress" id="initiateButton"
+                        onclick="transitionToNextWindow(2)">
+                        Confirm
+                        <div class="progressBar"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="questionnaireScreenC" class="screen">
+        <div class="screen-content text-left">
+            <div class="moving-signals">
+                <div class="track">
+                    <span class="signal forward">CHRNL</span>
+                    <span class="signal reverse">TEMPO</span>
+                    <span class="signal forward">QFLUX</span>
+                    <span class="signal forward">RIFTX</span>
+                    <span class="signal reverse">ORBIT</span>
+                    <span class="signal reverse">FLUXR</span>
+                    <span class="signal reverse">EPOCH</span>
+                    <span class="signal forward">SHIFT</span>
+                    <span class="signal forward">WARPX</span>
+                    <span class="signal reverse">VORTX</span>
+                    <span class="signal forward">PARAX</span>
+                    <span class="signal forward">TIMEX</span>
+                    <span class="signal forward" aria-hidden="true">CHRNL</span>
+                    <span class="signal reverse" aria-hidden="true">TEMPO</span>
+                    <span class="signal forward" aria-hidden="true">QFLUX</span>
+                    <span class="signal forward" aria-hidden="true">RIFTX</span>
+                    <span class="signal reverse" aria-hidden="true">ORBIT</span>
+                    <span class="signal reverse" aria-hidden="true">FLUXR</span>
+                    <span class="signal reverse" aria-hidden="true">EPOCH</span>
+                    <span class="signal forward" aria-hidden="true">SHIFT</span>
+                    <span class="signal forward" aria-hidden="true">WARPX</span>
+                    <span class="signal reverse" aria-hidden="true">VORTX</span>
+                    <span class="signal forward" aria-hidden="true">PARAX</span>
+                    <span class="signal forward" aria-hidden="true">TIMEX</span>
+                </div>
+            </div>
+            <div class="p8">
+                <div class="window question-console" style="margin: 48px 0 0 0;">
+                    <div class="window-content l3 row gap">
+                        <div>
+                            <span class="question">Q</span>
+                        </div>
+                        <div class="column">
+                            <span style="font-size: 1.5rem;line-height: 42px;">Malfunction Detected! You’ve Been
+                                Teleported into Your Last Favorite Movie/Book!</span>
+                            <span style="font-weight: 100;opacity: 0.5">Identify the genre you recently read to
+                                understand where you’ve landed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'genre')">
+                            Identity-First Location
+                        </button>
+                    </div>
+                </div>
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'genre')">
+                            Fantasy & Magical Surrealistic World
+                        </button>
+                    </div>
+                </div>
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'genre')">
+                            Psychological Thriller
+                        </button>
+                    </div>
+                </div>
+                <div class="button">
+                    <div class="button-window option-window">
+                        <button class="button-content option" data-gesture-type="instant" id="initiateButton"
+                            onclick="handleOptionClick(this, 'genre')">
+                            Romantic Drama
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="button">
+                <div class="button-window submit-window">
+                    <button class="button-content submit" data-gesture-type="progress" id="initiateButton"
+                        onclick="transitionToNextWindow(3)">
+                        Confirm
+                        <div class="progressBar"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Final screen (for later use) -->
     <div id="finalScreen" class="screen">
-        <h1>Thank You!</h1>
-        <p>Your responses have been recorded.</p>
+        <div class="screen-content">
+            <div class="screen-content" style="padding-bottom: 0;">
+                <div class="moving-signals">
+                    <div class="track">
+                        <span class="signal forward">CHRNL</span>
+                        <span class="signal reverse">TEMPO</span>
+                        <span class="signal forward">QFLUX</span>
+                        <span class="signal forward">RIFTX</span>
+                        <span class="signal reverse">ORBIT</span>
+                        <span class="signal reverse">FLUXR</span>
+                        <span class="signal reverse">EPOCH</span>
+                        <span class="signal forward">SHIFT</span>
+                        <span class="signal forward">WARPX</span>
+                        <span class="signal reverse">VORTX</span>
+                        <span class="signal forward">PARAX</span>
+                        <span class="signal forward">TIMEX</span>
+                        <span class="signal forward" aria-hidden="true">CHRNL</span>
+                        <span class="signal reverse" aria-hidden="true">TEMPO</span>
+                        <span class="signal forward" aria-hidden="true">QFLUX</span>
+                        <span class="signal forward" aria-hidden="true">RIFTX</span>
+                        <span class="signal reverse" aria-hidden="true">ORBIT</span>
+                        <span class="signal reverse" aria-hidden="true">FLUXR</span>
+                        <span class="signal reverse" aria-hidden="true">EPOCH</span>
+                        <span class="signal forward" aria-hidden="true">SHIFT</span>
+                        <span class="signal forward" aria-hidden="true">WARPX</span>
+                        <span class="signal reverse" aria-hidden="true">VORTX</span>
+                        <span class="signal forward" aria-hidden="true">PARAX</span>
+                        <span class="signal forward" aria-hidden="true">TIMEX</span>
+                    </div>
+                </div>
+
+
+                <div class="wrapper" style="margin: 38px 0 16px 0;">
+                    <div class="glitch2">Initiating your journey</div>
+                </div>
+
+                <div class="loader">
+                    <div class="loader-bar" id="progressBar" style="width: 0%;"></div>
+                </div>
+                <span id="progressText" style="margin: auto;">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="outputScreen" class="screen">
+        <div class="screen-content">
+            <div class="screen-content" style="padding-bottom: 0;">
+                <div class="moving-signals">
+                    <div class="track">
+                        <span class="signal forward">CHRNL</span>
+                        <span class="signal reverse">TEMPO</span>
+                        <span class="signal forward">QFLUX</span>
+                        <span class="signal forward">RIFTX</span>
+                        <span class="signal reverse">ORBIT</span>
+                        <span class="signal reverse">FLUXR</span>
+                        <span class="signal reverse">EPOCH</span>
+                        <span class="signal forward">SHIFT</span>
+                        <span class="signal forward">WARPX</span>
+                        <span class="signal reverse">VORTX</span>
+                        <span class="signal forward">PARAX</span>
+                        <span class="signal forward">TIMEX</span>
+                        <span class="signal forward" aria-hidden="true">CHRNL</span>
+                        <span class="signal reverse" aria-hidden="true">TEMPO</span>
+                        <span class="signal forward" aria-hidden="true">QFLUX</span>
+                        <span class="signal forward" aria-hidden="true">RIFTX</span>
+                        <span class="signal reverse" aria-hidden="true">ORBIT</span>
+                        <span class="signal reverse" aria-hidden="true">FLUXR</span>
+                        <span class="signal reverse" aria-hidden="true">EPOCH</span>
+                        <span class="signal forward" aria-hidden="true">SHIFT</span>
+                        <span class="signal forward" aria-hidden="true">WARPX</span>
+                        <span class="signal reverse" aria-hidden="true">VORTX</span>
+                        <span class="signal forward" aria-hidden="true">PARAX</span>
+                        <span class="signal forward" aria-hidden="true">TIMEX</span>
+                    </div>
+                </div>
+
+                <div style="margin: 38px 0 16px 0;font-size: 1.3rem;">
+                    Identity Confirmed:
+                </div>
+                <div id="outputText" style="margin: 38px 0 16px 0; font-size: 1.5rem;font-weight: 700;">
+                </div>
+                <div id="avatarComposite" class="avatar-stack"
+                    style="position: relative; width: 300px; height: 300px; margin: auto; margin-top: 32px;">
+                    <img id="regionImg" class="avatar-layer"
+                        style="position: absolute; margin:auto; top: 0; bottom:0; left: 0; right:0; width: 90%; height: auto;" />
+                    <img id="archetypeImg" class="avatar-layer"
+                        style="position: absolute; margin:auto; top: 0; left: 0; right:0; width: 90%; height: auto;" />
+                    <img id="tropeImg" class="avatar-layer"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: auto;" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="reset-button">
+        <div class="button">
+            <div class="button-window submit-window">
+                <button class="button-content submit" data-gesture-type="progress" id="initiateButton"
+                    onclick="transitionToNextWindow(5)">
+                    Reset
+                    <div class="progressBar"></div>
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Custom cursor that follows your wrist -->

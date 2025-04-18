@@ -1,0 +1,201 @@
+@keyframes glitch-animation-1 {
+    0% {
+        clip: rect(81px, 350px, 146px, 30px);
+    }
+
+    5% {
+        clip: rect(2px, 350px, 124px, 30px);
+    }
+
+    10% {
+        clip: rect(127px, 350px, 104px, 30px);
+    }
+
+    15% {
+        clip: rect(18px, 350px, 93px, 30px);
+    }
+
+    20% {
+        clip: rect(25px, 350px, 120px, 30px);
+    }
+
+    25% {
+        clip: rect(96px, 350px, 137px, 30px);
+    }
+
+    30% {
+        clip: rect(117px, 350px, 129px, 30px);
+    }
+
+    35% {
+        clip: rect(128px, 350px, 29px, 30px);
+    }
+
+    40% {
+        clip: rect(83px, 350px, 3px, 30px);
+    }
+
+    45% {
+        clip: rect(111px, 350px, 54px, 30px);
+    }
+
+    50% {
+        clip: rect(103px, 350px, 120px, 30px);
+    }
+
+    55% {
+        clip: rect(133px, 350px, 7px, 30px);
+    }
+
+    60% {
+        clip: rect(62px, 350px, 10px, 30px);
+    }
+
+    65% {
+        clip: rect(73px, 350px, 77px, 30px);
+    }
+
+    70% {
+        clip: rect(145px, 350px, 147px, 30px);
+    }
+
+    75% {
+        clip: rect(70px, 350px, 123px, 30px);
+    }
+
+    80% {
+        clip: rect(20px, 350px, 48px, 30px);
+    }
+
+    85% {
+        clip: rect(43px, 350px, 138px, 30px);
+    }
+
+    90% {
+        clip: rect(83px, 350px, 80px, 30px);
+    }
+
+    95% {
+        clip: rect(57px, 350px, 48px, 30px);
+    }
+
+    100% {
+        clip: rect(63px, 350px, 53px, 30px);
+    }
+}
+
+@keyframes glitch-animation-2 {
+    0% {
+        clip: rect(34px, 350px, 146px, 30px);
+    }
+
+    5% {
+        clip: rect(19px, 350px, 92px, 30px);
+    }
+
+    10% {
+        clip: rect(4px, 350px, 150px, 30px);
+    }
+
+    15% {
+        clip: rect(57px, 350px, 67px, 30px);
+    }
+
+    20% {
+        clip: rect(54px, 350px, 117px, 30px);
+    }
+
+    25% {
+        clip: rect(63px, 350px, 141px, 30px);
+    }
+
+    30% {
+        clip: rect(99px, 350px, 46px, 30px);
+    }
+
+    35% {
+        clip: rect(110px, 350px, 38px, 30px);
+    }
+
+    40% {
+        clip: rect(110px, 350px, 98px, 30px);
+    }
+
+    45% {
+        clip: rect(49px, 350px, 125px, 30px);
+    }
+
+    50% {
+        clip: rect(52px, 350px, 117px, 30px);
+    }
+
+    55% {
+        clip: rect(127px, 350px, 94px, 30px);
+    }
+
+    60% {
+        clip: rect(98px, 350px, 23px, 30px);
+    }
+
+    65% {
+        clip: rect(138px, 350px, 131px, 30px);
+    }
+
+    70% {
+        clip: rect(22px, 350px, 105px, 30px);
+    }
+
+    75% {
+        clip: rect(5px, 350px, 123px, 30px);
+    }
+
+    80% {
+        clip: rect(71px, 350px, 76px, 30px);
+    }
+
+    85% {
+        clip: rect(31px, 350px, 107px, 30px);
+    }
+
+    90% {
+        clip: rect(84px, 350px, 109px, 30px);
+    }
+
+    95% {
+        clip: rect(77px, 350px, 97px, 30px);
+    }
+
+    100% {
+        clip: rect(126px, 350px, 28px, 30px);
+    }
+}
+
+@keyframes screenEnter {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes screenExit {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+}
+
+@keyframes marquee-move-text {
+    to {
+        transform: translateX(-50%);
+    }
+}

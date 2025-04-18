@@ -1,0 +1,356 @@
+@import url('https://fonts.googleapis.com/css2?family=Quantico:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --neon-red: #F7654D;
+    --neon-yellow: #F9A83F;
+    --neon-blue: #00E9FF;
+    --neon-blue-highlight: #063c41;
+    --neon-green: #36DD81;
+    --neon-green-highlight: #08351c;
+    --almost-black: #0D0E17;
+    --white: #FFFFFF;
+
+    --p0: 0px;
+    --p1: 2px;
+    --p2: 4px;
+    --p3: 8px;
+    --p4: 16px;
+    --p5: 24px;
+
+    --g0: 0px;
+    --g1: 2px;
+    --g2: 4px;
+    --g3: 8px;
+    --g4: 16px;
+    --g5: 24px;
+    --g6: 32px;
+    --g7: 40px;
+    --g8: 48px;
+    --g9: 56px;
+    --g10: 64px;
+}
+
+body,
+html {
+    font-family: "Quantico", sans-serif;
+    height: 100%;
+    font-style: normal;
+}
+
+#webcam {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    z-index: 0;
+    transform: scaleX(-1);
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--almost-black);
+    color: var(--white);
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    transform-style: preserve-3d;
+    perspective: 800px;
+}
+
+.avatar-stack img {
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.gap {
+    gap: var(--g3);
+}
+
+.p8 {
+    width: 100%;
+    padding: var(--g2) var(--g8);
+}
+
+.l3 {
+    left: var(--p3);
+    width: calc(100% - var(--p3)) !important;
+}
+
+.divider {
+    width: 1px;
+    min-height: 100%;
+    background: var(--neon-red);
+}
+
+.button {
+    margin: var(--g6) 0 0 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100px;
+}
+
+.loader {
+    margin: 40px auto;
+    height: 24px;
+    width: 60%;
+    background: var(--white);
+    border-radius: 1000px;
+    padding: 4px;
+    transition: width 0.5s ease;
+}
+
+.loader-bar {
+    background: var(--neon-red);
+    height: 100%;
+    border-radius: 1000px;
+}
+
+.submit-window {
+    width: calc(100% - calc(var(--g8)*2));
+    left: var(--g8);
+    text-transform: uppercase;
+    background: var(--neon-green);
+}
+
+.submit-window>* {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--neon-green);
+}
+
+.option-window {
+    width: 100%;
+    height: 100%;
+    text-transform: capitalize;
+    background: var(--neon-blue);
+}
+
+.option-window>* {
+    font-size: 18px;
+    color: var(--neon-blue);
+}
+
+.option:hover,
+.option.hovered {
+    background: var(--neon-blue-highlight);
+}
+
+.option.selected {
+    background: var(--neon-blue-highlight);
+}
+
+.submit:hover,
+.submit.hovered {
+    background: var(--neon-green-highlight);
+}
+
+.button-window {
+    padding: 1px;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 16px 100%, 0% 80%);
+}
+
+.button-window>button {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 16px 100%, 0% 80%);
+    border: none;
+    z-index: 2;
+}
+
+.button-content {
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    font-family: 'Quantico';
+    position: relative;
+    background: var(--almost-black);
+    transition: background 0.3s ease;
+    overflow: hidden;
+}
+
+.window {
+    background: var(--neon-red);
+    padding: 1px;
+    position: relative;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 16px 100%, 0% 92%);
+}
+
+.window-content {
+    background: var(--almost-black);
+    position: relative;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 16px 100%, 0% 92%);
+}
+
+.screen {
+    position: absolute;
+    margin: auto;
+    width: 60%;
+    background: var(--neon-red);
+    opacity: 0;
+    pointer-events: none;
+    /* Inactive screens don't get clicks */
+    transform: scaleX(0);
+    transform-origin: center;
+    /* Ensure scaling happens from the center */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+
+    /* Added flex properties to center content */
+    display: flex;
+    flex-direction: column;
+    padding: 1px;
+    z-index: 3;
+    clip-path: polygon(0% 0%,
+            /* top-left corner */
+            100% 0%,
+            /* top-right corner */
+            100% 100%,
+            /* bottom-right corner */
+            27px 100%,
+            /* move left along the bottom edge */
+            0% 95%
+            /* diagonal back toward bottom-left corner */
+        );
+}
+
+.screen-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: var(--almost-black);
+    clip-path: polygon(0% 0%,
+            /* top-left corner */
+            100% 0%,
+            /* top-right corner */
+            100% 100%,
+            /* bottom-right corner */
+            27px 100%,
+            /* move left along the bottom edge */
+            0% 95%
+            /* diagonal back toward bottom-left corner */
+        );
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--g8);
+}
+
+/* When a screen is active, animate it in */
+.screen.active {
+    opacity: 1;
+    pointer-events: auto;
+    /* Allow interactions with the active screen */
+    /* transform: scaleX(1) rotate3d(1, 0, 0, 15deg) translateY(-150px); */
+    /* transform: scaleX(1) rotate3d(1, 0, 0, -15deg) translateY(-75px); */
+    transform: scaleX(1);
+}
+
+/* Custom cursor styling */
+#custom_cursor {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--neon-red);
+    z-index: 10;
+    pointer-events: none;
+    transform: scale(0);
+    transition: transform 0.3s ease-out;
+}
+
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 18px;
+}
+
+.wrapper div.glitch, .wrapper div.glitch2 {
+    color: white;
+    font-weight: 800;
+    position: relative;
+    font-size: 2rem;
+    padding: 0px;
+}
+
+.wrapper div.glitch::before {
+    content: "Hi therx, travxller";
+}
+
+.wrapper div.glitch::after {
+    content: "Hi thxre, travellxr";
+}
+
+.wrapper div.glitch2::before {
+    content: "Initiatxng glitch";
+}
+
+.wrapper div.glitch2::after {
+    content: "Glitching journey";
+}
+
+
+.wrapper div.glitch::before,
+.wrapper div.glitch2::before,
+.wrapper div.glitch::after,
+.wrapper div.glitch2::after {
+    padding: 0px;
+    color: white;
+    position: absolute;
+    width: 100%;
+    background: var(--almost-black);
+    overflow: hidden;
+    top: 0;
+}
+
+.wrapper div.glitch::before,.wrapper div.glitch2::before {
+    left: 3px;
+    text-shadow: -2px 0 red;
+    animation-name: glitch-animation-1;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-direction: reverse-alternate;
+}
+
+.wrapper div.glitch::after,.wrapper div.glitch2::after {
+    left: -3px;
+    text-shadow: -2px 0 blue;
+    animation-name: glitch-animation-2;
+    animation-duration: 2s;
+    animation-timing-function: linear;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-direction: reverse-alternate;
+}
